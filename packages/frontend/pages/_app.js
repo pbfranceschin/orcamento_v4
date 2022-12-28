@@ -16,6 +16,8 @@ import { useIsMounted } from '../hooks';
 const alchemyId = process.env.NEXT_PUBLIC_ALCHEMY_ID;
 // const infuraId = process.env.NEXT_PUBLIC_INFURA_ID;
 
+
+
 const hardhatChain = {
   id: 31337,
   name: 'Hardhat',
