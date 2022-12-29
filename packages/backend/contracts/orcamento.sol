@@ -112,4 +112,5 @@ contract OrcamentoUniao2023 is ERC1155, Ownable {
         umValor = trossoqualquer;
         emit testeEvento(umValor, msg.sender);
     }
+    
 }
