@@ -11,7 +11,7 @@ const SingleTransfer = (props) => {
                 className="input input-bordered"
                 type='text'
                 placeholder = "endereço"
-                value={props.valueSingle}
+                value={props.addressSingle}
                 onChange = {(e) => props.setAddressSingle(e.target.value)}
             />
             </div>
@@ -27,6 +27,7 @@ const SingleTransfer = (props) => {
                 className="input input-bordered"
                 type = "number"
                 placeholder = "montante"
+                value={props.valueSingle}
                 onChange = {(e) => props.setValueSingle(e.target.value)}
             />
             </div>

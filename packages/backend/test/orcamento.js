@@ -7,10 +7,12 @@ describe("Testing OrcamentoUniao contract", function () {
   let contract;
   let owner;
   let org1;
-  let org2
+  let org2;
+  let org3;
   let ownerAddress;
   let org1Address;
   let org2Address;
+  let org3Address;
   const OUTROS = 0;
   const EDUCACAO = 1;
   const INFRA = 2;
@@ -23,14 +25,15 @@ describe("Testing OrcamentoUniao contract", function () {
 
 
   beforeEach(async () => {
-    [owner, org1, org2] = await ethers.getSigners();
+    [owner, org1, org2, org3] = await ethers.getSigners();
     ownerAddress = await owner.getAddress();
     org1Address = await org1.getAddress();
     org2Address = await org2.getAddress();
+    org3Address = await org3.getAddress();
     contractFactory = await ethers.getContractFactory("OrcamentoUniao2023");
     contract = await contractFactory.deploy();
-    await contract.addOrg(org1Address, 1);
-    await contract.addOrg(org2Address, 0);
+    await contract.addOrg(org1Address, EDUCACAO);
+    await contract.addOrg(org2Address, OUTROS);
   });
 
   it("tests budget partitioning", async function () {
@@ -117,5 +120,12 @@ describe("Testing OrcamentoUniao contract", function () {
         ownerAddress, org2Address, EDUCACAO, 1, data
       )
     ).to.be.revertedWith("this organization does not have permission to receive this budget");
+    
+    await expect(
+      contract.safeTransferFrom(
+        ownerAddress, org3Address, OUTROS, 1, data
+      )
+    ).to.be.revertedWith("this organization does not have permission to receive this budget");
+
   });
 })
