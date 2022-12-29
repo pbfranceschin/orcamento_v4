@@ -1,6 +1,6 @@
 import React from "react";
 
-const AddArea = () => {
+const AddArea = (props) => {
     return (
         <>
         <div className='form-control pb-2'>

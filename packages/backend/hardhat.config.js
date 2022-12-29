@@ -5,8 +5,8 @@ require('hardhat-deploy');
 require('@nomiclabs/hardhat-ethers');
 require('@nomiclabs/hardhat-etherscan');
 
-// const defaultNetwork = 'localhost';
-const defaultNetwork = 'hardhat';
+const defaultNetwork = 'localhost';
+// const defaultNetwork = 'hardhat';
 
 /**
  * @type import('hardhat/config').HardhatUserConfig

@@ -100,4 +100,16 @@ contract OrcamentoUniao2023 is ERC1155, Ownable {
     function _setArea(address org, uint256 area) private {
         _orgArea[org][area] = true;
     }
+
+    ////////////////////////////
+    // teste //////////////
+    
+    event testeEvento(uint256 input, address caller);
+    uint256 private umValor;
+
+    function teste(uint256 trossoqualquer) public {
+        require(trossoqualquer == 0, "trossoqualquer nao eh zero");
+        umValor = trossoqualquer;
+        emit testeEvento(umValor, msg.sender);
+    }
 }

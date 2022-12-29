@@ -7,6 +7,7 @@ import SingleTransfer from '../components/user/SingleTransfer';
 import BatchTransfer from '../components/user/BatchTransfer';
 import GetArea from '../components/user/GetArea';
 import AddOrg from '../components/owner/AddOrg';
+import AddArea from '../components/owner/AddArea';
 
 import {
     useContract,
@@ -19,7 +20,6 @@ import {
 } from "wagmi";
 
 import { getContractData } from '../utils';
-import AddArea from '../components/owner/AddArea';
 
 const [contractAddress, contractABI] = getContractData();
 
@@ -138,7 +138,39 @@ export default function ApplicationSite() {
         transferSingle(addressSingle, areaSingle, valueSingle)
     }
 
-    
+    ///////////////// TESTE ///////////////////////
+    //////////////////////////////////////////////
+    const [trossoqualquer, setTrossoqualquer] = useState(0);
+
+    const teste = async(xxx) => {
+        let error = null
+        let txReceipt
+        const signerAddress = await signerData.getAddress()
+        try {            
+            console.log('trossoqualquer', xxx, 'de', signerAddress)
+            const tx = await Contract.teste(xxx)
+            txReceipt = await tx.wait()
+        } catch(err){
+            console.log(err)
+            error = err
+            let msg = "Erro:\n".concat(err)
+            alert(msg)
+            setButtonSingleText(buttonSingleDefault)
+        }
+        if(error === null) {
+            console.log('success')
+            console.log(txReceipt)
+        }        
+    }
+
+    const handleTrossoqualquer = () => {
+        teste(trossoqualquer)
+    }
+
+    ///////////////////////////////////////////////
+
+
+
     return (
         <>
             <Head>
@@ -218,9 +250,20 @@ export default function ApplicationSite() {
                         setAreaAdd={setAreaAdd}
                     />
                 </div>
-
+                {/* TESTE !!!!!!!!!!!!!!! */}
+                <div>
+                    <p>teste</p>
+                    <input 
+                        type='number'
+                        placeholder='trossoqualquer'
+                        value={trossoqualquer}
+                        onChange={(e) => setTrossoqualquer(e.target.value)}
+                    />
+                    <button onClick={handleTrossoqualquer}> trossoqualquer </button>
+                </div>
+                {/* !!!!!!!!!!!!!!!! TESTE */}
             </main>
-            
+
         </>      
     )
 
