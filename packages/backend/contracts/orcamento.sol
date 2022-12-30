@@ -93,6 +93,7 @@ contract OrcamentoUniao2023 is ERC1155, Ownable {
     }
 
     function addArea(address org, uint256 area) public onlyOwner{
+        require(_orgArea[org][OUTROS] == true, 'Please add organization first')
         require(_orgArea[org][area] != true, "area already set for this organization");
         _setArea(org, area);
     }

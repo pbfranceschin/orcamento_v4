@@ -25,8 +25,8 @@ const [contractAddress, contractABI] = getContractData();
 
 const buttonSingleDefault = "Transferir";
 const buttonGetAreaDefault = "Consultar";
-
-const buttonAddOrgDefault = "Cadastrar"
+const buttonAddOrgDefault = "Cadastrar";
+const buttonAddAreaDefault = "Cadastrar";
 
 export default function ApplicationSite() {
 
@@ -40,10 +40,11 @@ export default function ApplicationSite() {
     const [buttonSingleText, setButtonSingleText] = useState(buttonSingleDefault);
     const [buttonGetAreaText, setButtonGetAreaText] = useState(buttonGetAreaDefault);
     const [buttonAddOrgText, setButtonAddOrgText ] = useState(buttonAddOrgDefault);
+    const [buttonAddAreaText, setButtonAddAreaText ] = useState(buttonAddAreaDefault);
 
-    const [valueSingle, setValueSingle] = useState();
-    const [areaSingle, setAreaSingle] = useState(0);
-    const [addressSingle, setAddressSingle] = useState("");
+    const [valueSingle, setValueSingle] = useState('');
+    const [areaSingle, setAreaSingle] = useState('');
+    const [addressSingle, setAddressSingle] = useState('');
     // const [batchAddress, setBatchAddress] = useState();
     // const [batchValue1, setBacthValue1] = useState();
     // const [batchArea1, setBatchArea1] = useState();
@@ -51,12 +52,15 @@ export default function ApplicationSite() {
     // const [batchArea2, setBatchArea2] = useState();
     // const [batchValue3, setBacthValue3] = useState();
     // const [batchArea3, setBatchArea3] = useState();
-    const [areaGet, setAreaGet] = useState();
-
-    const [address1stAdd, setAddress1stAdd] = useState();
-    const [area1stAdd, setArea1stAdd] = useState();
-    const [addressAdd, setAddressAdd] = useState();
-    const [areaAdd, setAreaAdd] = useState();
+    
+    // getArea
+    const [areaGet, setAreaGet] = useState('');
+    // addOrg
+    const [address1stAdd, setAddress1stAdd] = useState('');
+    const [area1stAdd, setArea1stAdd] = useState('');
+    // addArea
+    const [addressAdd, setAddressAdd] = useState('');
+    const [areaAdd, setAreaAdd] = useState('');
     
     const transferSingle = async (
         to,
@@ -76,6 +80,8 @@ export default function ApplicationSite() {
         try {
             setButtonSingleText("Assinando...")
             console.log('singleTransfer from', signerAddress, 'to', to)
+            // const balanceReceived = await Contract.balanceOf(signerAddress, area.toString())
+            // console.log('BALANÇO',balanceReceived)
             const tx = await Contract.safeTransferFrom(
                 signerAddress,
                 to,
@@ -85,9 +91,6 @@ export default function ApplicationSite() {
             )
             setButtonSingleText("Enviando...")
             txReceipt = await tx.wait()
-            // const balanceReceived = await Contract.balanceOf(to, area.toString())
-            // console.log(balanceReceived)
-            console.log(Contract)
         } catch(err){
             console.log(err)
             error = err
@@ -105,28 +108,93 @@ export default function ApplicationSite() {
     // TODO
     // // // // função async que chama Contract.getAreas // // // //
     // 
-    // const getArea = async (
-    //     address,        
-    // ) => {
-    //     if(buttonSingleText !== buttonSingleDefault){
-    //         return
-    //     }
-    //     let error = null
-    //     try {
-    //         setButtonGetAreaText('Carregando...')
-    //         const tx = await Contract.
-    //     }
-    // }
-    // 
-    // // // // event handler pra getAreas // // // // 
-    // 
-    // 
+    const getArea = async (
+        account,        
+    ) => {
+        if(buttonSingleText !== buttonSingleDefault){
+            return
+        }
+        let error = null
+        let txReceipt
+        try {
+            setButtonGetAreaText('Carregando...')
+            const tx = await Contract.getAreas(account)
+            txReceipt = await tx.wait()
+        } catch(err){
+            console.log(err)
+            error = err
+            let msg = "Erro:\n".concat(err)
+            alert(msg)
+            setButtonGetAreaText(buttonGetAreaDefault)
+        }
+        if(error === null) {
+            console.log('success')
+            console.log(txReceipt)
+            setButtonGetAreaText(buttonGetAreaDefault)
+            // return output
+            alert(tx)
+        }
+    }
     
-
-    // TODO
-    // // // // funcao async que chama Contract.addOrg // // // // 
-    // // // // event handler pra addOrg // // // // // // // // /  
-
+    const addOrg = async (
+        account,
+        area
+    ) => {
+        if(buttonAddOrgText !== buttonAddOrgDefault){
+            return
+        }
+        let error = null
+        let txReceipt
+        try {
+            setButtonAddOrgText('Assinando...')
+            console.log('Adding account', account,'to area', area)
+            const tx = await Contract.addOrg(account, area)
+            setButtonAddOrgText('Enviando...')
+            txReceipt = await tx.wait()
+        } catch(err){
+            console.log(err)
+            error = err
+            let msg = "Erro:\n".concat(err)
+            alert(msg)
+            setButtonAddOrgText(buttonAddOrgDefault)
+        }
+        if(error === null) {
+            console.log('success')
+            console.log(txReceipt)
+            alert('Endereço', account, 'adicionado à área', area, 'com sucesso!')
+            setButtonAddOrgText(buttonAddOrgDefault)
+        }
+    }
+    
+    const addArea = async (
+        account,
+        area
+        ) => {
+            if(buttonAddAreaText !== buttonAddAreaDefault){
+                return
+            }
+            let error = null
+            let txReceipt
+            try{
+                setButtonAddAreaText('Assinando...')
+                console.log('Adding account', account,'to area', area)
+                const tx = await Contract.addArea(account, area)
+                setButtonAddAreaText('Enviando...')
+                txReceipt = await tx.wait()
+            } catch(err){
+                console.log(err)
+                error = err
+                let msg = "Erro:\n".concat(err)
+                alert(msg)
+                setButtonAddAreaText(buttonAddAreaDefault)
+            }
+            if(error === null) {
+                console.log('success')
+                console.log(txReceipt)
+                alert('Endereço ${account}, adicionado à área ${area} com sucesso!')
+                setButtonAddAreaText(buttonAddAreaDefault)
+            }
+    }
     // // // // funcao asyc que chama Contract.addArea // // // //
     // // // // event handler pra addArea // // // // // // // // 
 
@@ -138,34 +206,75 @@ export default function ApplicationSite() {
         transferSingle(addressSingle, areaSingle, valueSingle)
     }
 
+    const handleGetArea = () => {
+        if(!areaGet) {
+            alert('Preencha o campo _endereço_')
+            return
+        }
+        // const output = getArea(areaGet)
+        // return output
+        getArea(areaGet)
+    }
+
+    const handleAddOrg = () => {
+        if(!address1stAdd) {
+            alert('Preencha o campo do endereço')
+            return
+        }
+        if(!area1stAdd) {
+            addOrg(address1stAdd, 0)
+            setAddress1stAdd('')
+            setArea1stAdd('')
+            return
+        }
+        addOrg(address1stAdd, area1stAdd)
+        setAddress1stAdd('')
+        setArea1stAdd('')
+    }
+
+    const handleAddArea = () => {
+        if(!addressAdd || !areaAdd){
+            alert('Preencha os campos _endereço_ e _area_')
+            return
+        }
+        addArea(addressAdd, areaAdd)
+        setAddressAdd('')
+        setAreaAdd('')
+    }
+
+
+
+    const teste2 = () => {
+        alert('botao funcionando')
+    }
     ///////////////// TESTE ///////////////////////
     //////////////////////////////////////////////
-    const [trossoqualquer, setTrossoqualquer] = useState(0);
+    // const [trossoqualquer, setTrossoqualquer] = useState(0);
 
-    const teste = async(xxx) => {
-        let error = null
-        let txReceipt
-        const signerAddress = await signerData.getAddress()
-        try {            
-            console.log('trossoqualquer', xxx, 'de', signerAddress)
-            const tx = await Contract.teste(xxx)
-            txReceipt = await tx.wait()
-        } catch(err){
-            console.log(err)
-            error = err
-            let msg = "Erro:\n".concat(err)
-            alert(msg)
-            setButtonSingleText(buttonSingleDefault)
-        }
-        if(error === null) {
-            console.log('success')
-            console.log(txReceipt)
-        }        
-    }
+    // const teste = async(xxx) => {
+    //     let error = null
+    //     let txReceipt
+    //     const signerAddress = await signerData.getAddress()
+    //     try {            
+    //         console.log('trossoqualquer', xxx, 'de', signerAddress)
+    //         const tx = await Contract.teste(xxx)
+    //         txReceipt = await tx.wait()
+    //     } catch(err){
+    //         console.log(err)
+    //         error = err
+    //         let msg = "Erro:\n".concat(err)
+    //         alert(msg)
+    //         setButtonSingleText(buttonSingleDefault)
+    //     }
+    //     if(error === null) {
+    //         console.log('success')
+    //         console.log(txReceipt)
+    //     }        
+    // }
 
-    const handleTrossoqualquer = () => {
-        teste(trossoqualquer)
-    }
+    // const handleTrossoqualquer = () => {
+    //     teste(trossoqualquer)
+    // }
 
     ///////////////////////////////////////////////
 
@@ -218,28 +327,35 @@ export default function ApplicationSite() {
                     <h2>Consultas</h2>
                 </div>
                 <div>
-                    <p>Consulta de Areas</p>
+                    <p>Consulta de Áreas</p>
                     <GetArea 
                         areaGet={areaGet}
                         setAreaGet={setAreaGet}
-                    />
-                    <button>{buttonGetAreaText}</button>
-                </div> 
+                    />                
+                    
+                </div>
+                
                 
                 <div className={styles.center}>
                     <h2>Área de Controle</h2>
+                    <button onClick={handleGetArea}>
+                        {buttonGetAreaText}
+                    </button>
+                
                     
                 </div>
                 <div><p>Os métodos abaixo são de uso exclusivo do órgão de controle</p></div>
                 <div>
-                    <p>Cadastramento de órgão</p>
+                    <p>Cadastramento de novo órgão</p>
                     <AddOrg 
                         address1stAdd={address1stAdd}
-                        setAddressAdd={setAddress1stAdd}
+                        setAddress1stAdd={setAddress1stAdd}
                         area1stAdd={area1stAdd}
                         setArea1stAdd={setArea1stAdd}
                     />
-                    <button>{buttonAddOrgText}</button>
+                    <button onClick={handleAddOrg}>
+                        {buttonAddOrgText}
+                    </button>
                 </div>
                 <div>
                     <p>Cadastramento de órgão a nova área</p>
@@ -249,9 +365,12 @@ export default function ApplicationSite() {
                         areaAdd={areaAdd}
                         setAreaAdd={setAreaAdd}
                     />
+                    <button onClick={handleAddArea}>
+                        {buttonAddAreaText}
+                    </button>
                 </div>
                 {/* TESTE !!!!!!!!!!!!!!! */}
-                <div>
+                {/* <div>
                     <p>teste</p>
                     <input 
                         type='number'
@@ -260,7 +379,7 @@ export default function ApplicationSite() {
                         onChange={(e) => setTrossoqualquer(e.target.value)}
                     />
                     <button onClick={handleTrossoqualquer}> trossoqualquer </button>
-                </div>
+                </div> */}
                 {/* !!!!!!!!!!!!!!!! TESTE */}
             </main>
 

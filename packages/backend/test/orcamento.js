@@ -80,6 +80,8 @@ describe("Testing OrcamentoUniao contract", function () {
     expect(areas2[1]).to.eq(3);
     expect(areas2[2]).to.eq(0);
     expect(areas2[3]).to.eq(0);
+
+    // TODO expect addArea(org3Address, area) to revert
   });
 
   it("tests transfers", async function () {

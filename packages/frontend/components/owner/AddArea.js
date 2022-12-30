@@ -13,7 +13,7 @@ const AddArea = (props) => {
             />
             <input
                 className="input input-bordered"
-                type='text'
+                type='number'
                 placeholder = "área"
                 value={props.areaAdd}
                 onChange = {(e) => props.setAreaAdd(e.target.value)}
